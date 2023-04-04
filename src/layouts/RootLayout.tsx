@@ -1,4 +1,4 @@
-import { Outlet, Link, useLoaderData, Form } from "react-router-dom";
+import { Outlet, Link, useLoaderData, Form, redirect } from "react-router-dom";
 import { createContact, getContacts } from "../contacts";
 
 export async function loader() {
@@ -11,8 +11,7 @@ export async function loader() {
 // if this action called twice, db has two elments and useLoaderData() will return two elements
 export async function action() {
   const contact = await createContact();
-  // code doesnt benifit from this return now
-  return { contact };
+  return redirect(`/contacts/${contact.id}/edit`);
 }
 
 export default function RootLayout() {
