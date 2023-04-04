@@ -17,6 +17,8 @@ const router = createBrowserRouter([
     children: [
       {
         path: "contacts/:id",
+        // errors bubble up to the nearest errorElement
+        errorElement: <div>Oops! There was an error.</div>,
         // Component: Contact.Component,
         ...Contact,
       },
