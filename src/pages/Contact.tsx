@@ -1,18 +1,18 @@
-import { Form, useLoaderData } from "react-router-dom";
-import { getContact } from "../contacts";
-
-interface Contact {
-  first: string;
-  last: string;
-  avatar: string;
-  twitter: string;
-  notes: string;
-  favorite: boolean;
-}
+import { Form, useLoaderData, redirect } from "react-router-dom";
+import { getContact, deleteContact } from "../contacts";
 
 async function loader({ params }: any) {
   const contact: any = await getContact(params.id);
   return { contact };
+}
+
+async function action({ request, params }: any) {
+  switch (request.method) {
+    case "DELETE":
+      await deleteContact(params.id);
+      break;
+  }
+  return redirect("/");
 }
 
 function Component() {
@@ -51,8 +51,7 @@ function Component() {
             <button type="submit">Edit</button>
           </Form>
           <Form
-            method="post"
-            action="destroy"
+            method="delete"
             onSubmit={(event) => {
               if (!confirm("Please confirm you want to delete this record.")) {
                 event.preventDefault();
@@ -67,7 +66,7 @@ function Component() {
   );
 }
 
-function Favorite({ contact }: { contact: Contact }) {
+function Favorite({ contact }: any) {
   // yes, this is a `let` for later
   let favorite = contact.favorite;
   return (
@@ -83,4 +82,4 @@ function Favorite({ contact }: { contact: Contact }) {
   );
 }
 
-export default { Component, loader };
+export default { Component, loader, action };
