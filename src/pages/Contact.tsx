@@ -1,5 +1,5 @@
-import { Form, useLoaderData, redirect } from "react-router-dom";
-import { getContact, deleteContact } from "../contacts";
+import { Form, useLoaderData, redirect, useFetcher } from "react-router-dom";
+import { getContact, deleteContact, updateContact } from "../contacts";
 
 async function loader({ params }: any) {
   const contact: any = await getContact(params.id);
@@ -11,6 +11,11 @@ async function action({ request, params }: any) {
     case "DELETE":
       await deleteContact(params.id);
       break;
+    case "PATCH":
+      const formData = await request.formData();
+      return updateContact(params.id, {
+        favorite: formData.get("favorite") === "true",
+      });
   }
   return redirect("/");
 }
@@ -67,10 +72,17 @@ function Component() {
 }
 
 function Favorite({ contact }: any) {
-  // yes, this is a `let` for later
+  const fetcher = useFetcher();
+
   let favorite = contact.favorite;
+  // If we're in the middle of a PATCH request, use the new favorite value
+  // Optimistic UI
+  if (fetcher.formData) {
+    favorite = fetcher.formData.get("favorite") === "true";
+  }
+
   return (
-    <Form method="post">
+    <fetcher.Form method="patch">
       <button
         name="favorite"
         value={favorite ? "false" : "true"}
@@ -78,7 +90,7 @@ function Favorite({ contact }: any) {
       >
         {favorite ? "★" : "☆"}
       </button>
-    </Form>
+    </fetcher.Form>
   );
 }
 
