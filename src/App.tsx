@@ -5,6 +5,7 @@ import RootLayout, {
 } from "./layouts/RootLayout";
 import ErrorPage from "./pages/ErrorPage";
 import Contact from "./pages/Contact";
+import EditContact from "./pages/EditContact";
 
 const router = createBrowserRouter([
   {
@@ -18,6 +19,11 @@ const router = createBrowserRouter([
         path: "contacts/:id",
         // Component: Contact.Component,
         ...Contact,
+      },
+      {
+        path: "contacts/:id/edit",
+        loader: Contact.loader,
+        ...EditContact,
       },
     ],
   },

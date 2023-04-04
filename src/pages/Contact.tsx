@@ -10,13 +10,14 @@ interface Contact {
   favorite: boolean;
 }
 
-async function loader({ params }) {
+async function loader({ params }: any) {
   const contact: any = await getContact(params.id);
   return { contact };
 }
 
 function Component() {
-  const contact: any = useLoaderData();
+  const { contact }: any = useLoaderData();
+  console.log(contact.first);
 
   return (
     <div id="contact">
