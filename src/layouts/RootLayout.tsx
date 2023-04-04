@@ -1,6 +1,6 @@
 import {
   Outlet,
-  Link,
+  useNavigation,
   useLoaderData,
   Form,
   redirect,
@@ -22,6 +22,7 @@ export async function action() {
 }
 
 export default function RootLayout() {
+  const navigation = useNavigation();
   const { contacts }: any = useLoaderData();
   return (
     <>
@@ -71,7 +72,11 @@ export default function RootLayout() {
           )}
         </nav>
       </div>
-      <div id="detail">
+      <div
+        id="detail"
+        // it can be "loading" or "submitting" or "idle"
+        className={navigation.state === "loading" ? "loading" : ""}
+      >
         <Outlet />
       </div>
     </>
