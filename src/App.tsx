@@ -6,6 +6,7 @@ import RootLayout, {
 import ErrorPage from "./pages/ErrorPage";
 import Contact from "./pages/Contact";
 import EditContact from "./pages/EditContact";
+import Index from "./pages/index";
 
 const router = createBrowserRouter([
   {
@@ -15,6 +16,10 @@ const router = createBrowserRouter([
     loader: rootLoader,
     action: rootAction,
     children: [
+      {
+        index: true,
+        ...Index,
+      },
       {
         path: "contacts/:id",
         // errors bubble up to the nearest errorElement
