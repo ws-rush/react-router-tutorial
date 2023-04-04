@@ -11,7 +11,8 @@ const router = createBrowserRouter([
     children: [
       {
         path: "contacts/:id",
-        Component: Contact.Component,
+        // Component: Contact.Component,
+        ...Contact,
       },
     ],
   },
