@@ -1,4 +1,4 @@
-import { Form, useLoaderData, redirect } from "react-router-dom";
+import { Form, useLoaderData, redirect, useNavigate } from "react-router-dom";
 import { updateContact } from "../contacts";
 
 // use same loader of Contact page, see: src\pages\Contact.tsx and App.tsx
@@ -17,6 +17,7 @@ async function action({ request, params }: any) {
 
 function Component() {
   const { contact }: any = useLoaderData();
+  const navigate = useNavigate();
 
   return (
     <Form method="post" id="contact-form">
@@ -62,7 +63,9 @@ function Component() {
       </label>
       <p>
         <button type="submit">Save</button>
-        <button type="button">Cancel</button>
+        <button type="button" onClick={() => navigate(-1)}>
+          Cancel
+        </button>
       </p>
     </Form>
   );
