@@ -6,15 +6,14 @@ import Contact from "./pages/Contact";
 const router = createBrowserRouter([
   {
     path: "/",
-    // element: <h1>hello world</h1>,
     element: <RootLayout />,
-    // or:
-    // componenet: RootLayout,
     errorElement: <ErrorPage.Component />,
-  },
-  {
-    path: "/contacts/:id",
-    Component: Contact.Component,
+    children: [
+      {
+        path: "contacts/:id",
+        Component: Contact.Component,
+      },
+    ],
   },
 ]);
 
