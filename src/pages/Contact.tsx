@@ -17,7 +17,6 @@ async function loader({ params }: any) {
 
 function Component() {
   const { contact }: any = useLoaderData();
-  console.log(contact.first);
 
   return (
     <div id="contact">

@@ -6,7 +6,11 @@ import { updateContact } from "../contacts";
 async function action({ request, params }: any) {
   const formData = await request.formData();
   const updates = Object.fromEntries(formData.entries());
-  console;
+  // request, request.formData, formData.entries, Object.fromEntries web APIs
+  // updates.first
+  // updates.last
+  // const firstName = formData.get("first");
+  // const lastName = formData.get("last");
   await updateContact(params.id, updates);
   return redirect(`/contacts/${params.id}`);
 }
