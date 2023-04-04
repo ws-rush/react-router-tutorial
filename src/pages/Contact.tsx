@@ -1,4 +1,5 @@
-import { Form } from "react-router-dom";
+import { Form, useLoaderData } from "react-router-dom";
+import { getContact } from "../contacts";
 
 interface Contact {
   first: string;
@@ -9,15 +10,13 @@ interface Contact {
   favorite: boolean;
 }
 
+async function loader({ params }) {
+  const contact: any = await getContact(params.id);
+  return { contact };
+}
+
 function Component() {
-  const contact: Contact = {
-    first: "Your",
-    last: "Name",
-    avatar: "https://placekitten.com/g/200/200",
-    twitter: "your_handle",
-    notes: "Some notes",
-    favorite: true,
-  };
+  const contact: any = useLoaderData();
 
   return (
     <div id="contact">
@@ -84,4 +83,4 @@ function Favorite({ contact }: { contact: Contact }) {
   );
 }
 
-export default { Component };
+export default { Component, loader };
