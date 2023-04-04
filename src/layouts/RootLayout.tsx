@@ -1,9 +1,18 @@
-import { Outlet, Link, useLoaderData } from "react-router-dom";
-import { getContacts } from "../contacts";
+import { Outlet, Link, useLoaderData, Form } from "react-router-dom";
+import { createContact, getContacts } from "../contacts";
 
-export async function rootLoader() {
+export async function loader() {
   const contacts: any = await getContacts();
   return { contacts };
+}
+
+// react router revalidate data on every (post) navigation
+// so all useLoaderData() hooks update
+// if this action called twice, db has two elments and useLoaderData() will return two elements
+export async function action() {
+  const contact = await createContact();
+  // code doesnt benifit from this return now
+  return { contact };
 }
 
 export default function RootLayout() {
@@ -13,7 +22,7 @@ export default function RootLayout() {
       <div id="sidebar">
         <h1>React Router Contacts</h1>
         <div>
-          <form id="search-form" role="search">
+          <form method="post" id="search-form" role="search">
             <input
               id="q"
               aria-label="Search contacts"
@@ -24,9 +33,9 @@ export default function RootLayout() {
             <div id="search-spinner" aria-hidden hidden={true} />
             <div className="sr-only" aria-live="polite"></div>
           </form>
-          <form method="post">
+          <Form method="post">
             <button type="submit">New</button>
-          </form>
+          </Form>
         </div>
         <nav>
           {contacts.length ? (
