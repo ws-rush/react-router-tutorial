@@ -6,11 +6,14 @@ import {
   redirect,
   NavLink,
 } from "react-router-dom";
+import { useEffect } from "react";
 import { createContact, getContacts } from "../contacts";
 
-export async function loader() {
-  const contacts: any = await getContacts();
-  return { contacts };
+export async function loader({ request }: any) {
+  const url = new URL(request.url);
+  const q = url.searchParams.get("q");
+  const contacts = await getContacts(q);
+  return { contacts, q };
 }
 
 // react router revalidate data on every (post) navigation
@@ -23,23 +26,31 @@ export async function action() {
 
 export default function RootLayout() {
   const navigation = useNavigation();
-  const { contacts }: any = useLoaderData();
+  const { contacts, q }: any = useLoaderData();
+
+  // watch q to empty form if user turn back (make it identical to previous url)
+  useEffect(() => {
+    document.getElementById("q").value = q;
+  }, [q]);
+
   return (
     <>
       <div id="sidebar">
         <h1>React Router Contacts</h1>
         <div>
-          <form method="post" id="search-form" role="search">
+          <Form id="search-form" role="search">
             <input
               id="q"
               aria-label="Search contacts"
               placeholder="Search"
               type="search"
               name="q"
+              // pass q as value make input identical url after refresh
+              defaultValue={q}
             />
             <div id="search-spinner" aria-hidden hidden={true} />
             <div className="sr-only" aria-live="polite"></div>
-          </form>
+          </Form>
           <Form method="post">
             <button type="submit">New</button>
           </Form>
