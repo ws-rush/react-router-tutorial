@@ -59,7 +59,10 @@ export default function RootLayout() {
               defaultValue={q}
               onChange={(e: any) => {
                 // submit form on change, not manually
-                submit(e.currentTarget.form);
+                const isFirstSearch = q == null;
+                submit(e.currentTarget.form, {
+                  replace: !isFirstSearch,
+                });
               }}
             />
             <div id="search-spinner" aria-hidden hidden={!searching} />
