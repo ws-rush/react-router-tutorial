@@ -1,5 +1,5 @@
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import RootLayout from "./layouts/RootLayout";
+import RootLayout, { rootLoader } from "./layouts/RootLayout";
 import ErrorPage from "./pages/ErrorPage";
 import Contact from "./pages/Contact";
 
@@ -8,6 +8,7 @@ const router = createBrowserRouter([
     path: "/",
     element: <RootLayout />,
     errorElement: <ErrorPage.Component />,
+    loader: rootLoader,
     children: [
       {
         path: "contacts/:id",
