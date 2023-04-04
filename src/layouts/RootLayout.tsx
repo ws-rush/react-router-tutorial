@@ -30,6 +30,13 @@ export default function RootLayout() {
   const navigation = useNavigation();
   const submit = useSubmit();
 
+  // if user search, show loader
+  // coz q value doesnt show in url until data loaded
+  // so we need to check url to show spinner
+  const searching =
+    navigation.location &&
+    new URLSearchParams(navigation.location.search).has("q");
+
   // watch q to empty form if user turn back (make it identical to previous url)
   useEffect(() => {
     document.getElementById("q").value = q;
@@ -43,6 +50,7 @@ export default function RootLayout() {
           <Form id="search-form" role="search">
             <input
               id="q"
+              className={searching ? "loading" : ""}
               aria-label="Search contacts"
               placeholder="Search"
               type="search"
@@ -54,7 +62,7 @@ export default function RootLayout() {
                 submit(e.currentTarget.form);
               }}
             />
-            <div id="search-spinner" aria-hidden hidden={true} />
+            <div id="search-spinner" aria-hidden hidden={!searching} />
             <div className="sr-only" aria-live="polite"></div>
           </Form>
           <Form method="post">
