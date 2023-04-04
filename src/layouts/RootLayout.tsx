@@ -1,6 +1,7 @@
 import {
   Outlet,
   useNavigation,
+  useSubmit,
   useLoaderData,
   Form,
   redirect,
@@ -25,8 +26,9 @@ export async function action() {
 }
 
 export default function RootLayout() {
-  const navigation = useNavigation();
   const { contacts, q }: any = useLoaderData();
+  const navigation = useNavigation();
+  const submit = useSubmit();
 
   // watch q to empty form if user turn back (make it identical to previous url)
   useEffect(() => {
@@ -47,6 +49,10 @@ export default function RootLayout() {
               name="q"
               // pass q as value make input identical url after refresh
               defaultValue={q}
+              onChange={(e: any) => {
+                // submit form on change, not manually
+                submit(e.currentTarget.form);
+              }}
             />
             <div id="search-spinner" aria-hidden hidden={true} />
             <div className="sr-only" aria-live="polite"></div>
