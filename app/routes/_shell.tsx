@@ -6,11 +6,15 @@ import {
   Form,
   redirect,
   NavLink,
+  useRouteError,
 } from "react-router-dom";
 import { useEffect } from "react";
-import { createContact, getContacts } from "../contacts";
+import { createContact, getContacts } from "../services";
+import { router } from "../main";
 
-export async function loader({ request }: any) {
+export const id = '_shell'
+
+export async function clientLoader({ request }: any) {
   const url = new URL(request.url);
   const q = url.searchParams.get("q");
   const contacts = await getContacts(q);
@@ -20,7 +24,7 @@ export async function loader({ request }: any) {
 // react router revalidate data on every (post) navigation
 // so all useLoaderData() hooks update
 // if this action called twice, db has two elments and useLoaderData() will return two elements
-export async function action() {
+export async function clientAction() {
   const contact = await createContact();
   return redirect(`/contacts/${contact.id}/edit`);
 }
@@ -108,5 +112,20 @@ export default function RootLayout() {
         <Outlet />
       </div>
     </>
+  );
+}
+
+export function ErrorBoundary() {
+  const error: any = useRouteError();
+  console.error(error);
+
+  return (
+    <div id="error-page">
+      <h1>Oops!</h1>
+      <p>Sorry, an unexpected error has occurred.</p>
+      <p>
+        <i>{error.statusText || error.message}</i>
+      </p>
+    </div>
   );
 }

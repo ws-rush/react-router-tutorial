@@ -1,9 +1,12 @@
 import { Form, useLoaderData, redirect, useNavigate } from "react-router-dom";
-import { updateContact } from "../contacts";
+import { getContact, updateContact } from "../services";
 
-// use same loader of Contact page, see: src\pages\Contact.tsx and App.tsx
+export async function clientLoader({ params }: any) {
+  const contact: any = await getContact(params.id);
+  return { contact };
+}
 
-async function action({ request, params }: any) {
+export async function clientAction({ request, params }: any) {
   const formData = await request.formData();
   const updates = Object.fromEntries(formData.entries());
   // request, request.formData, formData.entries, Object.fromEntries web APIs
@@ -15,7 +18,7 @@ async function action({ request, params }: any) {
   return redirect(`/contacts/${params.id}`);
 }
 
-function Component() {
+export default function Component() {
   const { contact }: any = useLoaderData();
   const navigate = useNavigate();
 
@@ -70,5 +73,3 @@ function Component() {
     </Form>
   );
 }
-
-export default { Component, action };

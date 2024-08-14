@@ -1,4 +1,4 @@
-function Component() {
+export default function Component() {
   return (
     <p id="zero-state">
       This is a demo for React Router.
@@ -8,5 +8,3 @@ function Component() {
     </p>
   );
 }
-
-export default { Component };

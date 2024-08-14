@@ -1,12 +1,12 @@
 import { Form, useLoaderData, redirect, useFetcher } from "react-router-dom";
-import { getContact, deleteContact, updateContact } from "../contacts";
+import { deleteContact, getContact, updateContact } from "../services";
 
-async function loader({ params }: any) {
+export async function clientLoader({ params }: any) {
   const contact: any = await getContact(params.id);
   return { contact };
 }
 
-async function action({ request, params }: any) {
+export async function clientAction({ request, params }: any) {
   switch (request.method) {
     case "DELETE":
       await deleteContact(params.id);
@@ -20,7 +20,7 @@ async function action({ request, params }: any) {
   return redirect("/");
 }
 
-function Component() {
+export default function Component() {
   const { contact }: any = useLoaderData();
 
   return (
@@ -71,6 +71,10 @@ function Component() {
   );
 }
 
+export function ErrorBoundry() {
+  return <div>Oops! There was an error.</div>;
+}
+
 function Favorite({ contact }: any) {
   const fetcher = useFetcher();
 
@@ -93,5 +97,3 @@ function Favorite({ contact }: any) {
     </fetcher.Form>
   );
 }
-
-export default { Component, loader, action };

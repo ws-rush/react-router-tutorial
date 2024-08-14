@@ -22,6 +22,7 @@
     "@types/sort-by": "^1.2.3",
     "@vitejs/plugin-react-swc": "^3.7.0",
     "typescript": "^4.9.5",
+    "unplugin-remix-router": "^2.1.0",
     "vite": "^4.5.3"
   }
 }
