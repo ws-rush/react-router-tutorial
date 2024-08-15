@@ -31,6 +31,7 @@ export async function clientAction() {
 
 export default function RootLayout() {
   const { contacts, q }: any = useLoaderData();
+  console.log(q)
   const navigation = useNavigation();
   const submit = useSubmit();
 
@@ -41,10 +42,11 @@ export default function RootLayout() {
     navigation.location &&
     new URLSearchParams(navigation.location.search).has("q");
 
-  // watch q to empty form if user turn back (make it identical to previous url)
-  useEffect(() => {
-    document.getElementById("q").value = q;
-  }, [q]);
+  //  watch q to empty form if user turn back (make it identical to previous url)
+  // not needed while form use replace when submit
+  // useEffect(() => {
+  //   document.getElementById("q").value = q;
+  // }, [q]);
 
   return (
     <>
@@ -63,8 +65,9 @@ export default function RootLayout() {
               defaultValue={q}
               onChange={(e: any) => {
                 // submit form on change, not manually
+                const ddd = new FormData(e.currentTarget.form)
                 const isFirstSearch = q == null;
-                submit(e.currentTarget.form, {
+                submit(removeEmptyKeysFromFormData(ddd), {
                   replace: !isFirstSearch,
                 });
               }}
@@ -128,4 +131,25 @@ export function ErrorBoundary() {
       </p>
     </div>
   );
+}
+
+function removeEmptyKeysFromFormData(formData: FormData) {
+  // Create a plain object from FormData
+  const data: Record<string, FormDataEntryValue> = {};
+  for (const [key, value] of formData.entries()) {
+      data[key] = value;
+  }
+
+  // Remove keys with empty values
+  const cleanedData = Object.fromEntries(
+      Object.entries(data).filter(([key, value]) => value !== null && value !== undefined && typeof value === 'string' && value.trim() !== '')
+  );
+
+  // Create a new FormData object and append cleaned data
+  const cleanedFormData = new FormData();
+  for (const [key, value] of Object.entries(cleanedData)) {
+      cleanedFormData.append(key, value);
+  }
+
+  return cleanedFormData;
 }
